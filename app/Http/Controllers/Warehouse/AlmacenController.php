@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Warehouse\CreateAlmRqt;
 use App\Http\Requests\Warehouse\UpdateAlmRqt;
 use App\services\Warehouse\AlmacenService;
-use Illuminate\Http\Request;
+
 
 class AlmacenController extends Controller
 {

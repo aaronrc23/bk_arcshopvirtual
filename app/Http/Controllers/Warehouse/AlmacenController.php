@@ -12,6 +12,7 @@ use App\services\Warehouse\AlmacenService;
 class AlmacenController extends Controller
 {
     protected $almacenService;
+
     public function __construct(AlmacenService $almacenService)
     {
         $this->almacenService = $almacenService;

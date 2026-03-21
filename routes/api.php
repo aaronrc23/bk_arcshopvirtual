@@ -13,6 +13,7 @@ require __DIR__ ."/Consultas/ConsultasRouter.php";
 require __DIR__ ."/Warehouse/AlmacenRouter.php";
 require __DIR__ ."/Warehouse/InventarioRouter.php";
 
+
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');

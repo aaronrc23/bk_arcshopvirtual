@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services\Warehouse;
+namespace App\services\Warehouse;
 
 
 use App\Models\Warehouse\Inventario;
-use App\Services\ValidationStockService;
+use App\services\ValidationStockService;
 
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\DB;

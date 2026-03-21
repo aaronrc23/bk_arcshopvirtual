@@ -9,7 +9,7 @@ use App\Http\Requests\Administracion\Asignacion\AssignPerModuleRqt;
 use App\Http\Requests\Administracion\Asignacion\AssignRoleToUserRqt;
 use App\Http\Requests\Administracion\Asignacion\UpdUserRolRqt;
 use App\Http\Resources\Administracion\AsignacionResource;
-use App\Services\Administracion\AsignacionRolesService;
+use App\services\Administracion\AsignacionRolesService;
 use Illuminate\Http\Request;
 
 class AsignacionController extends Controller

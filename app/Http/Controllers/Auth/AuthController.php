@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRqt;
 use App\Http\Resources\Auth\LoginResource;
-use App\Services\Auth\AuthService;
+use App\services\Auth\AuthService;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller

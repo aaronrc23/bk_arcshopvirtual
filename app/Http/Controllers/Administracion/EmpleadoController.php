@@ -7,7 +7,7 @@ use App\Http\Requests\Administracion\EmpleadoCreateRqt;
 use App\Http\Requests\Administracion\EmpleadoUpdateRqt;
 use App\Http\Resources\Administracion\EmpleadoResource;
 use App\Models\Administracion\Empleados;
-use App\Services\Administracion\EmpleadoService;
+use App\services\Administracion\EmpleadoService;
 use App\services\Administracion\UpdateEmpService;
 use Illuminate\Http\Request;
 

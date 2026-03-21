@@ -9,10 +9,10 @@ use App\Http\Requests\Logistica\Productos\UpdateProdRqt;
 use App\Http\Resources\Logistica\Productos\ListProd;
 use App\Http\Resources\Logistica\Productos\ProductImgResource;
 use App\Models\Logistica\Productos;
-use App\Services\Logistica\Productos\CreateServiceProducto;
-use App\Services\Logistica\Productos\ImgServiceProducto;
-use App\Services\Logistica\Productos\ListProductoServices;
-use App\Services\Logistica\Productos\UpdateServiceProducto;
+use App\services\Logistica\Productos\CreateServiceProducto;
+use App\services\Logistica\Productos\ImgServiceProducto;
+use App\services\Logistica\Productos\ListProductoServices;
+use App\services\Logistica\Productos\UpdateServiceProducto;
 
 class ProductoController extends Controller
 {

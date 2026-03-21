@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services\warehouse;
+namespace App\services\warehouse;
 
 use App\Enums\TipoEntrada;
 use App\Http\Requests\Warehouse\StoreInvRequest;
 use App\Http\Requests\Warehouse\UpdateInvRequest;
 use App\Http\Resources\Warehouse\InventarioResource;
 use App\Models\Warehouse\Inventario;
-use App\Services\Warehouse\MovInventarioservice;
+use App\services\Warehouse\MovInventarioservice;
 use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Auth;

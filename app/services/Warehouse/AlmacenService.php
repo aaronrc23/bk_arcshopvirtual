@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Warehouse;
+namespace App\services\Warehouse;
 
 use App\Enums\TipoAlm;
 use App\Http\Requests\Warehouse\CreateAlmRqt;

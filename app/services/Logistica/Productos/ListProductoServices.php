@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Logistica\Productos;
+namespace App\services\Logistica\Productos;
 
 use App\Models\Logistica\Productos;
 

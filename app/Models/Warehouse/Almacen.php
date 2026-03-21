@@ -2,6 +2,7 @@
 
 namespace App\Models\Warehouse;
 
+use App\Models\Warehouse\Inventario;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -24,6 +25,12 @@ class Almacen extends Model
         'estado' => 'boolean',
         'is_principal' => 'boolean',
     ];
+
+
+    public function inventarios()
+    {
+        return $this->hasMany(Inventario::class);
+    }
 
     // 🔗 Relaciones
 

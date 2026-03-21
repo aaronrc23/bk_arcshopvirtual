@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Models\Warehouse;
-
-use App\Models\Warehouse\Inventario;
+namespace App\Models\Warehouse\Almacen;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -27,20 +25,5 @@ class Almacen extends Model
     ];
 
 
-    public function inventarios()
-    {
-        return $this->hasMany(Inventario::class);
-    }
 
-    // 🔗 Relaciones
-
-    // public function productalmacen()
-    // {
-    //     return $this->hasMany(Inventario::class, 'almacen_id');
-    // }
-
-    // public function pedidos()
-    // {
-    //     return $this->hasMany(Pedido::class, 'almacen_id');
-    // }
 }

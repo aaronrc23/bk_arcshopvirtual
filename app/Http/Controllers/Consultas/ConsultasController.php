@@ -6,7 +6,6 @@ use App\Enums\Categorylevel;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Shop\listDetailProdRes;
 use App\Http\Resources\Shop\ListProdshopReosurce;
-use App\Http\Resources\Warehouse\InventarioResource;
 use App\Models\Catalogos\TipoAfectacion;
 use App\Models\Catalogos\TipoComprobante;
 use App\Models\Catalogos\Unidades;

@@ -2,6 +2,8 @@
 
 namespace App\Models\Warehouse;
 
+
+use App\Models\Warehouse\Inventario;
 use App\Models\Auth\User;
 use Illuminate\Database\Eloquent\Model;
 

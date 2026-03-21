@@ -39,8 +39,9 @@ class Empresa extends Model
         'estado',
     ];
     public $timestamps = false;
-    public function user()
+
+    public function empleados()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->hasMany(Empresa::class);
     }
 }

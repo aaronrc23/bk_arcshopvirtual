@@ -18,6 +18,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             EmpresaSeeder::class,
             AuthSeeder::class,
+            UnidadesSeeder::class,
+            TipoComprobanteSeeder::class,
+            ParametroSeeder::class,
+            TipoDocumentoSeeder::class,
         ]);
     }
 }

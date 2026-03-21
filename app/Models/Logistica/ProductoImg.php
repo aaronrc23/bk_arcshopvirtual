@@ -9,7 +9,7 @@ class ProductoImg extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'product_images';
+    protected $table = 'productos_images';
 
     protected $fillable = [
         'url',

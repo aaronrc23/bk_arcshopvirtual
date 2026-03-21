@@ -24,13 +24,20 @@ class Empleados extends Model
         'distrito',
         'referencia',
         'photo',
+        'empresa_id'
 
     ];
 
     protected $dates = ['deleted_at'];
 
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class, 'empresa_id');
     }
 }

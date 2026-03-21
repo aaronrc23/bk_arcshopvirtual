@@ -9,9 +9,9 @@ use App\Http\Requests\Logistica\Categorias\UpdateCategoriaRqt;
 use App\Http\Resources\Logistica\Categorias\CatDropresource;
 use App\Http\Resources\Logistica\Categorias\CatFullresource;
 use App\Http\Resources\Logistica\Categorias\CatPadreresource;
-use App\Services\Logistica\Categorias\CreateCatService;
-use App\Services\Logistica\Categorias\ListCatService;
-use App\Services\Logistica\Categorias\UpdateCatService;
+use App\services\Logistica\Categorias\CreateCatService;
+use App\services\Logistica\Categorias\ListCatService;
+use App\services\Logistica\Categorias\UpdateCatService;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller

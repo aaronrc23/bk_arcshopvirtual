@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Logistica\Categorias;
+namespace App\services\Logistica\Categorias;
 
 use App\Enums\CategoryLevel;
 use App\Models\Logistica\Categorias;

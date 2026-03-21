@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Administracion;
+namespace App\services\Administracion;
 
 use App\Models\Administracion\Empleados;
 use App\Models\Auth\User;

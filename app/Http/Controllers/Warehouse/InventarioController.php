@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Warehouse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Warehouse\MovInvRequest;
 use App\Http\Requests\Warehouse\StoreInvRequest;
-use App\Services\warehouse\InventarioService;
-use App\Services\Warehouse\MovInventarioservice;
+use App\services\warehouse\InventarioService;
+use App\services\Warehouse\MovInventarioservice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 

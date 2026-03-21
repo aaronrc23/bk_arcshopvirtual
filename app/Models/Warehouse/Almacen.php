@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Warehouse\Almacen;
+namespace App\Models\Warehouse;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

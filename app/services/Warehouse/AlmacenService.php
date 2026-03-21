@@ -1,11 +1,11 @@
 <?php
 
-namespace App\services\Warehouse;
+namespace App\Services\Warehouse;
 
 use App\Enums\TipoAlm;
 use App\Http\Requests\Warehouse\CreateAlmRqt;
 use App\Http\Requests\Warehouse\UpdateAlmRqt;
-use App\Models\Warehouse\Almacen;
+use App\Models\Warehouse\Almacen\Almacen;
 use Illuminate\Database\Eloquent\Collection;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

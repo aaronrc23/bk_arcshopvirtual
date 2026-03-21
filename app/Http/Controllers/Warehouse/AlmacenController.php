@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Warehouse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Warehouse\CreateAlmRqt;
 use App\Http\Requests\Warehouse\UpdateAlmRqt;
-use App\Models\Warehouse\Almacen;
+use App\Models\Warehouse\Almacen\Almacen;
 use App\services\Warehouse\AlmacenService;
 
 
@@ -17,7 +17,6 @@ class AlmacenController extends Controller
     {
         $this->almacenService = $almacenService;
     }
-
 
     public function listindex()
     {

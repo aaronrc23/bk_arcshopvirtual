@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\warehouse;
+namespace App\Repositories\Warehouse;
 
 use App\Enums\TipoAlm;
 use App\Models\Warehouse\Inventario;

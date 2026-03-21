@@ -2,7 +2,6 @@
 
 namespace App\services\Logistica\Categorias;
 
-use App\Enums\CategoryLevel;
 use App\Models\Logistica\Categorias;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;

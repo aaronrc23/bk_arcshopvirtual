@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Services\Logistica\Productos;
+namespace App\services\Logistica\Productos;
+
+use App\services\Logistica\Productos\UtilServiceProducto;
 use DragonCode\Support\Facades\Filesystem\File;
 use App\Models\Logistica\Categorias;
 use App\Models\Logistica\Productos;

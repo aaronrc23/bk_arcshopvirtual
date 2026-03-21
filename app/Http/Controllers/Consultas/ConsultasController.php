@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Consultas;
 
-use App\Enums\CategoryLevel;
+use App\Enums\Categorylevel;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Shop\listDetailProdRes;
 use App\Http\Resources\Shop\ListProdshopReosurce;
@@ -23,7 +23,7 @@ class ConsultasController extends Controller
     {
         $unidad = Unidades::select('id', 'descripcion')->get();
         $afectacion = TipoAfectacion::all();
-        $categoria = Categorias::where('level', CategoryLevel::SUBCATEGORIA)->select('id', 'name')->get();
+        $categoria = Categorias::where('level', Categorylevel::SUBCATEGORIA)->select('id', 'name')->get();
 
         return [
             'unidad' => $unidad,

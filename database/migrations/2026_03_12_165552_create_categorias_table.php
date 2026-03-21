@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\CategoryLevel;
+use App\Enums\Categorylevel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,8 +19,8 @@ return new class extends Migration
             // Nivel jerárquico
             $table->enum(
                 'level',
-                array_column(CategoryLevel::cases(), 'value')
-            )->default(CategoryLevel::CATEGORIA->value);
+                array_column(Categorylevel::cases(), 'value')
+            )->default(Categorylevel::CATEGORIA->value);
 
             // Auto-relación recursiva
             $table->foreignId('parent_id')

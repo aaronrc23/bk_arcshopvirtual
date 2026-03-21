@@ -2,7 +2,7 @@
 
 namespace App\Services\Logistica\Categorias;
 
-use App\Enums\CategoryLevel;
+use App\Enums\Categorylevel;
 use App\Http\Resources\Logistica\CatDropResource;
 use App\Models\Logistica\Categorias;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +18,7 @@ class ListCatService
     {
         $categorias = Categorias::whereNull('deleted_at')
             ->where('is_active', true)
-            ->where('level', CategoryLevel::CATEGORIA)
+            ->where('level', Categorylevel::CATEGORIA)
             ->orderBy('order')
             ->get();
 
@@ -35,7 +35,7 @@ class ListCatService
             ->get();
 
         return $categorias
-            ->where('level', CategoryLevel::CATEGORIA)
+            ->where('level', Categorylevel::CATEGORIA)
             ->whereNull('parent_id')
             ->map(function ($categoria) {
                 return [

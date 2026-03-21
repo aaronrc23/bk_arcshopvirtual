@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\Logistica\Categorias;
 
-use App\Enums\CategoryLevel;
+use App\Enums\Categorylevel;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -29,7 +29,7 @@ class CreateCatRqt extends FormRequest
             'parent_id' => ['nullable', 'integer', 'exists:categorias,id'],
 
             // ✅ valida enum, pero NO convierte
-            'level' => ['nullable', new Enum(CategoryLevel::class)],
+            'level' => ['nullable', new Enum(Categorylevel::class)],
 
             'icon' => ['nullable', 'string', 'max:255'],
 

@@ -2,7 +2,7 @@
 
 namespace App\Models\Logistica;
 
-use App\Enums\CategoryLevel;
+use App\Enums\Categorylevel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -24,7 +24,7 @@ class Categorias extends Model
     ];
 
     protected $casts = [
-        'level' => CategoryLevel::class,
+        'level' => Categorylevel::class,
         'is_active' => 'boolean',
     ];
 

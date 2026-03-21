@@ -2,7 +2,7 @@
 
 namespace App\services\Logistica\Categorias;
 
-use App\Enums\CategoryLevel;
+use App\Enums\Categorylevel;
 use App\Models\Logistica\Categorias;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -31,16 +31,16 @@ class CreateCatService
 
             // ✅ SIEMPRE enum
             $level = isset($data['level'])
-                ? CategoryLevel::from($data['level']) // 👈 aquí SÍ
+                ? Categorylevel::from($data['level']) // 👈 aquí SÍ
                 : null;
 
             if (!$level) {
                 if (!$parent) {
-                    $level = CategoryLevel::CATEGORIA;
-                } elseif ($parent->level === CategoryLevel::CATEGORIA) {
-                    $level = CategoryLevel::SUBCATEGORIA;
-                } elseif ($parent->level === CategoryLevel::SUBCATEGORIA) {
-                    $level = CategoryLevel::ITEM;
+                    $level = Categorylevel::CATEGORIA;
+                } elseif ($parent->level === Categorylevel::CATEGORIA) {
+                    $level = Categorylevel::SUBCATEGORIA;
+                } elseif ($parent->level === Categorylevel::SUBCATEGORIA) {
+                    $level = Categorylevel::ITEM;
                 } else {
                     throw new BadRequestHttpException('Nivel de categoría inválido');
                 }
@@ -78,7 +78,7 @@ class CreateCatService
         $items = collect($data['items'])->map(fn($itemName) => [
             'name' => $itemName,
             'parent_category_id' => $parentCategory->id,
-            'level' => CategoryLevel::ITEM->value,
+            'level' => Categorylevel::ITEM->value,
             'is_active' => true,
             'created_at' => now(),
             'updated_at' => now(),

@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum CategoryLevel: string
+enum Categorylevel: string
 {
     case CATEGORIA = 'categoria';
     case SUBCATEGORIA = 'subcategoria';

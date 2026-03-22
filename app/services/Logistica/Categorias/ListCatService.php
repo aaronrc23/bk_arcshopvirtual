@@ -58,7 +58,7 @@ class ListCatService
 
     public function findOne(int $id)
     {
-        return Categorias::findOrFail($id);
+        return Categorias::find($id);
     }
 
     public function categoriasHijas()

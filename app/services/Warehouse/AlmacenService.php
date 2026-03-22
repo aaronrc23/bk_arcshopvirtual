@@ -56,12 +56,12 @@ class AlmacenService
      */
     public function findAll(): Collection
     {
-        return Almacen::query()->get();
+        return Almacen::all();
     }
 
     public function buscarAlmacenes($id)
     {
-        $almacen = Almacen::findOrFail($id);
+        $almacen = Almacen::find($id);
         if (!$almacen) {
             return response()->json([
                 'message' => 'No se encontro el almacén',
@@ -95,7 +95,10 @@ class AlmacenService
 
     public function update($id, UpdateAlmRqt $request)
     {
-        $almacen = Almacen::findOrFail($id);
+        $almacen = Almacen::find($id);
+        if (!$almacen) {
+            return response()->json(['error' => 'Almacén no encontrado'], 404);
+        }
         $almacen->update($request->validated());
         return response()->json($almacen);
     }
@@ -104,7 +107,10 @@ class AlmacenService
 
     public function updateprincipal($id)
     {
-        $almacen = Almacen::findOrFail($id);
+        $almacen = Almacen::find($id);
+        if (!$almacen) {
+            return response()->json(['error' => 'Almacén no encontrado'], 404);
+        }
         if ($almacen->isPrincipal) {
             return response()->json([
                 'message' => 'El almacén ya es principal',
@@ -120,7 +126,10 @@ class AlmacenService
     }
     public function delete($id)
     {
-        $almacen = Almacen::findOrFail($id);
+        $almacen = Almacen::find($id);
+        if (!$almacen) {
+            return response()->json(['error' => 'Almacén no encontrado'], 404);
+        }
         $almacen->delete();
         return response()->json($almacen);
     }
@@ -128,7 +137,10 @@ class AlmacenService
 
     public function restore($id)
     {
-        $almacen = Almacen::withTrashed()->findOrFail($id);
+        $almacen = Almacen::withTrashed()->find($id);
+        if (!$almacen) {
+            return response()->json(['error' => 'Almacén no encontrado'], 404);
+        }
         $almacen->restore();
 
         return response()->json();

@@ -87,7 +87,10 @@ class UpdateCatService
 
     public function desactivar(int $id)
     {
-        $categoria = Categorias::findOrFail($id);
+        $categoria = Categorias::find($id);
+        if (!$categoria) {
+            return response()->json(['error' => 'Categoría no encontrada'], 404);
+        }
 
         // 🔎 Verificar si tiene subcategorías activas
         $tieneHijosActivos = $categoria->children()
@@ -110,7 +113,10 @@ class UpdateCatService
 
     public function reactivar(int $id)
     {
-        $categoria = Categorias::findOrFail($id);
+        $categoria = Categorias::find($id);
+        if (!$categoria) {
+            return response()->json(['error' => 'Categoría no encontrada'], 404);
+        }
         $categoria->update(['is_active' => true]);
 
         return response()->json([

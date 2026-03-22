@@ -32,7 +32,10 @@ class InventarioService
 
     public function find($id)
     {
-        $inventario = Inventario::findOrFail($id);
+        $inventario = Inventario::find($id);
+        if (!$inventario) {
+            return response()->json(['error' => 'Inventario no encontrado'], 404);
+        }
         return response()->json($inventario);
     }
 
@@ -66,7 +69,10 @@ class InventarioService
     public function delete($id)
     {
         try {
-            $inventario = Inventario::findOrFail($id);
+            $inventario = Inventario::find($id);
+            if (!$inventario) {
+                return response()->json(['error' => 'Inventario no encontrado'], 404);
+            }
             $inventario->delete();
             return response()->json($inventario);
         } catch (Exception $e) {

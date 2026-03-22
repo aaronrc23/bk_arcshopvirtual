@@ -11,6 +11,7 @@ class Inventario extends Model
     use SoftDeletes;
     protected $table = 'inventario';
     protected $fillable = [
+        'id',
         'product_id',
         'stock',
         'almacen_id',

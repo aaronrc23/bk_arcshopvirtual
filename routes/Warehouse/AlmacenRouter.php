@@ -4,7 +4,7 @@ use App\Http\Controllers\Warehouse\AlmacenController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum', 'authempleado'])->prefix('almacenes')->controller(AlmacenController::class)->group(function () {
-    Route::get('/', 'index');
+    Route::get('/list', 'index');
     Route::get('findByName/{name}', 'findByName');
     Route::get('/find/{id}', 'find');
     Route::post('/', 'store');

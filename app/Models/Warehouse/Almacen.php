@@ -12,6 +12,7 @@ class Almacen extends Model
     protected $table = 'almacenes';
 
     protected $fillable = [
+        'id',
         'code',
         'nombre',
         'descripcion',
@@ -25,8 +26,5 @@ class Almacen extends Model
         'is_principal' => 'boolean',
     ];
 
-    public function inventarios()
-    {
-        return $this->hasMany(Inventario::class, 'almacen_id'); // ✅ corregido
-    }
+
 }

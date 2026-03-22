@@ -170,7 +170,11 @@ class UpdateServiceProducto
     /*---Borrado logico--- */
     public function deleteProducto(int $productId): void
     {
-        $product = Productos::findOrFail($productId);
+        $product = Productos::find($productId);
+
+        if (!$product) {
+            throw new NotFoundHttpException('Producto no encontrado');
+        }
 
         $product->delete();
     }

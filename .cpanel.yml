@@ -2,7 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/aaronrcd/public_html/repositories/virtualshop.aaronrcdev.com
-
     - /bin/cp -R %{home}/repository/. $DEPLOYPATH
-
-    - cd $DEPLOYPATH && /usr/local/bin/php /usr/local/bin/composer install --no-dev --optimize-autoloader --no-interaction

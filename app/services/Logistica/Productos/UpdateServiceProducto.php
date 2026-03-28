@@ -4,7 +4,7 @@ namespace App\services\Logistica\Productos;
 
 use App\Models\Logistica\ProductoImg;
 use App\Models\Logistica\Productos;
-use DragonCode\Support\Facades\Filesystem\File;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 

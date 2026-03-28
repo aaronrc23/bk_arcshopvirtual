@@ -16,6 +16,17 @@ use Illuminate\Http\Request;
 
 class ConsultasController extends Controller
 {
+    public function listCategorias()
+    {
+        $categorias = Categorias::where("level", Categorylevel::SUBCATEGORIA)
+            ->get()
+            ->map(fn($c) => [
+                "id" => $c->id,
+                "nombre" => $c->name,
+            ]);
+
+        return response()->json($categorias);
+    }
 
 
     public function refprod()
@@ -49,15 +60,33 @@ class ConsultasController extends Controller
         return ListProdshopReosurce::collection($inventario);
     }
 
+
+    public function productosPorCategoria($categoriaId)
+    {
+        $inventario = Inventario::with([
+            'producto.imagenPrincipal',
+            'producto.categoria',
+            'producto.unidad',
+            'almacen'
+        ])
+            ->whereHas('almacen', fn($q) => $q->where('tipo', 'VIRTUAL'))
+            ->whereHas('producto', function ($q) use ($categoriaId) {
+                $q->where('categoria_id', $categoriaId);
+            })
+            ->get();
+
+        return ListProdshopReosurce::collection($inventario);
+    }
+
     public function show($id)
     {
         $producto = Inventario::with([
-            'producto.imagenes', // 🔥 todas las imágenes
+            'producto.imagenes',
             'producto.categoria',
             'producto.unidad'
         ])
             ->where('product_id', $id)
-            ->firstOrFail();
+            ->first();
 
         return new listDetailProdRes($producto);
     }

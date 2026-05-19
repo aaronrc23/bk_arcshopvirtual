@@ -25,7 +25,7 @@ class UpdateAlmRqt extends FormRequest
     {
         return [
             'code' => ['nullable', 'string'],
-            'name' => ['required', 'string'],
+            'nombre' => ['required', 'string'],
             'tipo' => ['required', new Enum(TipoAlm::class)],
             'is_principal' => ['nullable', 'boolean'],
         ];

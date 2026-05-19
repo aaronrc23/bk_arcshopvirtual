@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MovimientoInventario extends Model
 {
-    protected $table = 'mov_inventarios';
+    protected $table = 'mov_inventario';
 
     protected $fillable = [
         'inventario_id',
@@ -22,7 +22,7 @@ class MovimientoInventario extends Model
 
     public function inventario()
     {
-        return $this->belongsTo(Inventario::class);
+        return $this->belongsTo(Inventario::class, 'inventario_id');
     }
 
     public function user()

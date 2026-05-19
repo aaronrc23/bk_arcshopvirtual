@@ -64,6 +64,42 @@ class CreateServiceProducto
                     ]);
                 }
 
+                if (!empty($data['caracteristicas'])) {
+
+                    $caracteristicas = collect($data['caracteristicas'])
+                        ->map(function ($item, $index) {
+                            return [
+                                'descripcion' => $item['descripcion'],
+                                'orden' => $index + 1,
+                            ];
+                        })
+                        ->toArray();
+
+                    $producto->caracteristicas()->createMany($caracteristicas);
+                }
+
+                if (!empty($data['presentaciones'])) {
+
+                    $presentaciones = collect($data['presentaciones'])
+                        ->map(function ($item) {
+                            return [
+                                'medida' => $item['medida'] ?? null,
+                                'unidades_por_caja' => $item['unidades_por_caja'],
+
+                                'largo' => $item['largo'] ?? null,
+                                'ancho' => $item['ancho'] ?? null,
+                                'alto' => $item['alto'] ?? null,
+                                'peso' => $item['peso'] ?? null,
+
+                                'unidad_id' => $item['unidad_id'] ?? "NIU",
+                                'es_principal' => $item['es_principal'] ?? false,
+                            ];
+                        })
+                        ->toArray();
+
+                    $producto->presentaciones()->createMany($presentaciones);
+                }
+
                 // ---------------------------
                 //  GUARDAR IMÁGENES
                 // ---------------------------

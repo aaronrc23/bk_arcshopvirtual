@@ -6,6 +6,7 @@ use App\Models\Catalogos\TipoAfectacion;
 use App\Models\Catalogos\Unidades;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Productos extends Model
@@ -29,6 +30,7 @@ class Productos extends Model
         'tipo_afectacion_id',
         'categoria_id',
         'unidad_id',
+        'marca_id',
         'activo',
         'destacado',
         'cantidad_mayoreo',
@@ -79,5 +81,21 @@ class Productos extends Model
     {
         return $this->hasOne(ProductoImg::class, 'producto_id')
             ->where('is_principal', true);
+    }
+
+
+    public function marca()
+    {
+        return $this->belongsTo(Marcas::class, 'marca_id');
+    }
+
+    public function presentaciones(): HasMany
+    {
+        return $this->hasMany(Presentaciones::class, 'producto_id');
+    }
+
+    public function caracteristicas(): HasMany
+    {
+        return $this->hasMany(Caracteristicas::class, 'producto_id');
     }
 }

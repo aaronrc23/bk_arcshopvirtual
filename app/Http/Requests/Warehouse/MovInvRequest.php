@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Warehouse;
 
+use App\Enums\TipoEntrada;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MovInvRequest extends FormRequest
@@ -14,6 +16,29 @@ class MovInvRequest extends FormRequest
         return true;
     }
 
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+
+            $tipo = $this->tipo;
+
+            if ($tipo === 'TRANSFERENCIA') {
+
+                if (!$this->filled('almacen_origen_id')) {
+                    $validator->errors()->add('almacen_origen_id', 'Requerido para transferencia');
+                }
+
+                if (!$this->filled('almacen_destino_id')) {
+                    $validator->errors()->add('almacen_destino_id', 'Requerido para transferencia');
+                }
+            } else {
+
+                if (!$this->filled('almacen_id')) {
+                    $validator->errors()->add('almacen_id', 'Almacén requerido');
+                }
+            }
+        });
+    }
     /**
      * Get the validation rules that apply to the request.
      *
@@ -22,12 +47,15 @@ class MovInvRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => 'required|exists:products,id',
-            'almacen_id' => 'required|exists:almacenes,id',
-            'tipo' => 'required|in:TipoEntrada::cases()->value',
+            'product_id' => 'required|exists:productos,id',
+            'tipo' => ['required', new Enum(TipoEntrada::class)],
             'cantidad' => 'required|integer|min:1',
             'descripcion' => 'nullable|string|max:255',
             'estado' => 'nullable|boolean',
+            'almacen_id' => 'required_if:tipo,' . TipoEntrada::ENTRADA->value . ',' . TipoEntrada::SALIDA->value . ',' . TipoEntrada::VENTA->value . ',' . TipoEntrada::REPOSICION->value . ',' . TipoEntrada::AJUSTE->value,
+
+            'almacen_origen_id' => 'required_if:tipo,' . TipoEntrada::TRANSFERENCIA->value,
+            'almacen_destino_id' => 'required_if:tipo,' . TipoEntrada::TRANSFERENCIA->value,
         ];
     }
 }

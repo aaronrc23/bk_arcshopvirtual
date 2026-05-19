@@ -4,87 +4,189 @@ namespace App\services\Warehouse;
 
 use App\Enums\TipoEntrada;
 use App\Http\Requests\Warehouse\MovInvRequest;
+use App\Http\Resources\Warehouse\MovInventarioResource;
 use App\Models\Warehouse\Inventario;
 use App\Models\Warehouse\MovimientoInventario;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MovInventarioservice
 {
 
-
-    //codigo de movimiento reutilizable
-    private function movInventario($data)
+    public function listMov()
     {
-        $movimiento = MovimientoInventario::create([
-            'inventario_id' => $data['inventario_id'],
-            'tipo' => $data['tipo'],
-            'cantidad' => $data['cantidad'],
-            'stock_anterior' => $data['stock_anterior'],
-            'descripcion' => $data['descripcion'],
-            'user_id' => $data['user_id'],
+        return MovInventarioResource::collection(
+            MovimientoInventario::with('user', 'inventario.producto', 'inventario.almacen')
+                ->latest()
+                ->get()
+        );
+    }
+
+    public function procesarMovimiento(MovInvRequest $request)
+    {
+        return match ($request->tipo) {
+
+            'TRANSFERENCIA' => $this->procesarTransferencia($request),
+
+            default => $this->procesarMovimientoNormal($request),
+        };
+    }
+
+    private function validarStock(int $stockActual, int $cantidad): int
+    {
+        if ($stockActual < $cantidad) {
+            throw new Exception("Stock insuficiente");
+        }
+
+        return $stockActual - $cantidad;
+    }
+
+    private function calcularStock(string $tipo, int $stockActual, int $cantidad): int
+    {
+        return match ($tipo) {
+
+            'ENTRADA', 'REPOSICION' => $stockActual + $cantidad,
+
+            'SALIDA', 'VENTA' => $this->validarStock($stockActual, $cantidad),
+
+            'AJUSTE' => $cantidad,
+
+
+            default => $stockActual,
+        };
+    }
+
+    private function registrarMovimiento(
+        int $inventarioId,
+        string $tipo,
+        int $cantidad,
+        int $stockAnterior,
+        int $stockNuevo,
+        ?string $descripcion = null
+    ): void {
+        MovimientoInventario::create([
+            'inventario_id' => $inventarioId,
+            'tipo' => $tipo,
+            'cantidad' => $cantidad,
+            'stock_anterior' => $stockAnterior,
+            'stock_nuevo' => $stockNuevo,
+            'descripcion' => $descripcion ?? 'Movimiento inventario',
+            'user_id' => Auth::id(),
         ]);
-        return $movimiento;
     }
 
 
-    public function procesarMovimiento(
-        MovInvRequest $request
-    ) {
+    private function procesarTransferencia(MovInvRequest $request)
+    {
+        $cantidad = $request->cantidad;
 
-        // buscar inventario o crearlo
-        $inventario = Inventario::firstOrCreate(
-            [
+        return DB::transaction(function () use ($request, $cantidad) {
+
+            // 🔴 ORIGEN
+            $origen = Inventario::firstOrCreate([
                 'product_id' => $request->product_id,
-                'almacen_id' => $request->almacen_id,
-            ],
-            [
-                'cantidad' => 0,
+                'almacen_id' => $request->almacen_origen_id,
+            ], [
+                'stock' => 0,
                 'minStock' => 0,
-                'estado' => $request->estado ?? true,
-                'tipo' => TipoEntrada::ENTRADA->value,
-            ]
-        );
+                'estado' => true,
+            ]);
 
-        $stockAnterior = $inventario->cantidad;
-        $stockFinal = $stockAnterior;
+            $stockOrigenAnterior = (int) $origen->stock;
 
-        switch ($request->tipo) {
+            if ($stockOrigenAnterior < $cantidad) {
+                throw new Exception("Stock insuficiente en almacén origen");
+            }
 
-            case 'ENTRADA':
-            case 'REPOSICION':
-                $stockFinal += $request->cantidad;
-                break;
+            $stockOrigenNuevo = $stockOrigenAnterior - $cantidad;
 
-            case 'SALIDA':
-            case 'VENTA':
-                if ($stockAnterior < $request->cantidad) {
-                    throw new Exception("Stock insuficiente");
-                }
-                $stockFinal -= $request->cantidad;
-                break;
+            $origen->update([
+                'stock' => $stockOrigenNuevo
+            ]);
 
-            case 'AJUSTE':
-                $stockFinal = $request->cantidad;
-                break;
-        }
+            $this->registrarMovimiento(
+                inventarioId: $origen->id,
+                tipo: 'TRANSFERENCIA_SALIDA',
+                cantidad: $cantidad,
+                stockAnterior: $stockOrigenAnterior,
+                stockNuevo: $stockOrigenNuevo,
+                descripcion: 'Transferencia a otro almacén'
+            );
 
-        // actualizar stock
-        $inventario->update([
-            'cantidad' => $stockFinal
-        ]);
+            // 🟢 DESTINO
+            $destino = Inventario::firstOrCreate([
+                'product_id' => $request->product_id,
+                'almacen_id' => $request->almacen_destino_id,
+            ], [
+                'stock' => 0,
+                'minStock' => 0,
+                'estado' => true,
+            ]);
 
-        // registrar movimiento
-        $this->movInventario([
-            'inventario_id' => $inventario->id,
-            'tipo' => $request->tipo,
-            'cantidad' => $request->cantidad,
-            'stock_anterior' => $stockAnterior,
-            'stock_nuevo' => $stockFinal,
-            'descripcion' => $request->descripcion ?? 'Movimiento inventario',
-            'user_id' => Auth::id(),
-        ]);
+            $stockDestinoAnterior = (int) $destino->stock;
+            $stockDestinoNuevo = $stockDestinoAnterior + $cantidad;
 
-        return $inventario->fresh();
+            $destino->update([
+                'stock' => $stockDestinoNuevo
+            ]);
+
+            $this->registrarMovimiento(
+                inventarioId: $destino->id,
+                tipo: 'TRANSFERENCIA_ENTRADA',
+                cantidad: $cantidad,
+                stockAnterior: $stockDestinoAnterior,
+                stockNuevo: $stockDestinoNuevo,
+                descripcion: 'Transferencia desde otro almacén'
+            );
+
+            return [
+                'origen' => $origen->fresh(),
+                'destino' => $destino->fresh(),
+            ];
+        });
+    }
+
+
+    public function procesarMovimientoNormal(MovInvRequest $request)
+    {
+        return DB::transaction(function () use ($request) {
+
+            $inventario = Inventario::firstOrCreate(
+                [
+                    'product_id' => $request->product_id,
+                    'almacen_id' => $request->almacen_id,
+                ],
+                [
+                    'cantidad' => 0,
+                    'minStock' => 0,
+                    'estado' => $request->estado ?? true,
+                    'tipo' => TipoEntrada::ENTRADA->value,
+                ]
+            );
+
+            $stockAnterior = (int) ($inventario->stock ?? 0);
+
+            $stockFinal = $this->calcularStock(
+                tipo: $request->tipo,
+                stockActual: $stockAnterior,
+                cantidad: $request->cantidad
+            );
+
+            $inventario->update([
+                'stock' => $stockFinal
+            ]);
+
+            $this->registrarMovimiento(
+                inventarioId: $inventario->id,
+                tipo: $request->tipo,
+                cantidad: $request->cantidad,
+                stockAnterior: $stockAnterior,
+                stockNuevo: $stockFinal,
+                descripcion: $request->descripcion
+            );
+
+            return $inventario->fresh();
+        });
     }
 }

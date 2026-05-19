@@ -38,6 +38,13 @@ class ListProd extends JsonResource
             'destacado' => $this->destacado,
             'cantidad_mayoreo' => $this->cantidad_mayoreo,
             'imagenes' => ProductImgResource::collection($this->imagenes),
+
+            'marca' => [
+                'id' => $this->marca?->id,
+                'nombre' => $this->marca?->nombre,
+            ],
+            'presentaciones' => PresentacionResource::collection($this->presentaciones),
+            'caracteristicas' => CaracteristicaResource::collection($this->caracteristicas),
         ];
     }
 }

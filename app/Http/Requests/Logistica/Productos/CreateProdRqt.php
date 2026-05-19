@@ -14,6 +14,15 @@ class CreateProdRqt extends FormRequest
         return true;
     }
 
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'caracteristicas' => json_decode($this->caracteristicas ?? '[]', true),
+            'presentaciones' => json_decode($this->presentaciones ?? '[]', true),
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -30,6 +39,7 @@ class CreateProdRqt extends FormRequest
             'cantidad_mayoreo' => ['nullable', 'integer', 'min:1'],
             'tipo_afectacion_id' => ['required', 'exists:tipo_afectacion,id'],
             'categoria_id' => ['required', 'exists:categorias,id'],
+            'marca_id' => ['nullable', 'exists:marcas,id'],
             'unidad_id' => ['required', 'exists:unidades,id'],
             'afecto_icbper' => ['required', 'boolean'],
             'factor_icbper' => ['nullable', 'numeric'],
@@ -42,6 +52,22 @@ class CreateProdRqt extends FormRequest
                 'mimes:jpeg,png,jpg,webp',
                 'max:2048'
             ],
+            'caracteristicas' => ['nullable', 'array'],
+            'caracteristicas.*.descripcion' => ['required', 'string'],
+
+            'presentaciones' => ['nullable', 'array'],
+
+            'presentaciones.*.medida' => ['nullable', 'string'],
+            'presentaciones.*.unidades_por_caja' => ['nullable', 'numeric'],
+
+            'presentaciones.*.largo' => ['nullable', 'numeric'],
+            'presentaciones.*.ancho' => ['nullable', 'numeric'],
+            'presentaciones.*.alto' => ['nullable', 'numeric'],
+            'presentaciones.*.peso' => ['nullable', 'numeric'],
+
+
+
+            'presentaciones.*.es_principal' => ['nullable', 'boolean'],
         ];
     }
 }

@@ -25,9 +25,40 @@ class InventarioService
     {
         $inventario = Inventario::with(['producto', 'almacen'])
             ->where('estado', true)
-            ->get();
+            ->get()
+            ->groupBy('product_id')
+            ->map(function ($items) {
 
-        return InventarioResource::collection($inventario);
+                $producto = $items->first()->producto;
+
+                return [
+                    'product_id' => $producto->id,
+                    'producto' => $producto->name,
+                    'codigo' => $producto->codigo_interno ?? null,
+                    'stock_total' => $items->sum('stock'),
+                    'min_stock' => $items->sum('min_stock'),
+                    'max_stock' => $items->sum('max_stock'),
+
+                    // cantidad de almacenes
+                    'almacenes_count' => $items->count(),
+
+                    // detalle para desplegable
+                    'almacenes' => $items->map(function ($inventario) {
+                        return [
+                            'inventario_id' => $inventario->id,
+                            'almacen_id' => $inventario->almacen_id,
+                            'almacen' => $inventario->almacen->nombre,
+                            'stock' => $inventario->stock,
+                            'min_stock' => $inventario->min_stock,
+                            'max_stock' => $inventario->max_stock,
+                            'tipo' => $inventario->almacen->tipo ?? "-",
+                        ];
+                    })->values(),
+                ];
+            })
+            ->values();
+
+        return response()->json($inventario);
     }
 
     public function find($id)

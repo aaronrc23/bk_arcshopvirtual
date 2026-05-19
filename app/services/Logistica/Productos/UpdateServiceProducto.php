@@ -24,6 +24,33 @@ class UpdateServiceProducto
             throw new NotFoundHttpException('Producto no encontrado');
         }
         $valores = $this->utilService->calcularValores($data);
+        if (isset($data['caracteristicas'])) {
+
+            $product->caracteristicas()->delete();
+
+            foreach ($data['caracteristicas'] as $item) {
+                $product->caracteristicas()->create([
+                    'descripcion' => $item['descripcion'],
+                ]);
+            }
+        }
+        if (isset($data['presentaciones'])) {
+
+            $product->presentaciones()->delete();
+
+            foreach ($data['presentaciones'] as $item) {
+                $product->presentaciones()->create([
+                    'medida' => $item['medida'] ?? null,
+                    'unidades_por_caja' => $item['unidades_por_caja'] ?? 0,
+                    'largo' => $item['largo'] ?? null,
+                    'ancho' => $item['ancho'] ?? null,
+                    'alto' => $item['alto'] ?? null,
+                    'peso' => $item['peso'] ?? null,
+                    'unidad_id' => $item['unidad_id'] ?? null,
+                    'es_principal' => $item['es_principal'] ?? false,
+                ]);
+            }
+        }
         $product->update([
             ...$data,
             'valor_unitario' => $valores['valor_unitario'],

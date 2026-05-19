@@ -27,6 +27,7 @@ class InventarioResource extends JsonResource
                 'id' => $this->producto?->id,
                 'nombre' => $this->producto?->name,
                 'precio' => $this->producto?->precio_venta,
+                'sku' => $this->producto?->codigo_interno,
             ],
 
             'almacen' => [

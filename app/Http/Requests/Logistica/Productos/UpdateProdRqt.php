@@ -35,7 +35,20 @@ class UpdateProdRqt extends FormRequest
             'factor_icbper' => ['nullable', 'numeric'],
             'activo' => ['nullable', 'boolean'],
             'destacado' => ['nullable', 'boolean'],
-            'imagenes' => ['nullable', 'array', 'max:7']
+            'imagenes' => ['nullable', 'array', 'max:7'],
+            'caracteristicas' => ['nullable', 'array'],
+            'caracteristicas.*.descripcion' => ['required', 'string'],
+
+            'presentaciones' => ['nullable', 'array'],
+
+            'presentaciones.*.medida' => ['nullable', 'string'],
+            'presentaciones.*.unidades_por_caja' => ['nullable', 'numeric'],
+
+            'presentaciones.*.largo' => ['nullable', 'numeric'],
+            'presentaciones.*.ancho' => ['nullable', 'numeric'],
+            'presentaciones.*.alto' => ['nullable', 'numeric'],
+            'presentaciones.*.peso' => ['nullable', 'numeric'],
+            'presentaciones.*.es_principal' => ['nullable', 'boolean'],
 
         ];
     }

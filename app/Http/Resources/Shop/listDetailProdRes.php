@@ -37,6 +37,26 @@ class listDetailProdRes extends JsonResource
                 'imagenes' => ProductImgResource::collection(
                     $this->producto->imagenes
                 ),
+                'caracteristicas' => $this->producto->caracteristicas->map(function ($item) {
+                    return [
+                        'descripcion' => $item->descripcion,
+                    ];
+                }),
+
+                'presentaciones' => $this->producto->presentaciones->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'medida' => $item->medida,
+                        'unidades_por_caja' => $item->unidades_por_caja,
+                        'peso' => $item->peso,
+                        'dimensiones' => [
+                            'largo' => $item->largo,
+                            'ancho' => $item->ancho,
+                            'alto' => $item->alto,
+                        ],
+                        'es_principal' => (bool) $item->es_principal,
+                    ];
+                }),
             ],
         ];
     }

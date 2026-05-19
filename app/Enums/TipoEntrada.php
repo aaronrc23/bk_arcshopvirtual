@@ -9,4 +9,6 @@ enum TipoEntrada: string
     case VENTA = 'VENTA';
     case REPOSICION = 'REPOSICION';
     case AJUSTE = 'AJUSTE';
+    case TRANSFERENCIA = 'TRANSFERENCIA';
+    case DEVOLUCION = 'DEVOLUCION';
 }

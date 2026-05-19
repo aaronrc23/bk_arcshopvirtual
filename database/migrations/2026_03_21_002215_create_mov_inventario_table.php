@@ -18,8 +18,7 @@ return new class extends Migration
                 ->constrained('inventario')
                 ->onDelete('cascade');
 
-            $table->enum('tipo', array_column(TipoEntrada::cases(), 'value'))
-                ->default(TipoEntrada::ENTRADA->value);
+            $table->string('tipo');
 
             // Cantidad (puede ser decimal si vendes por peso/litros, si no, use integer)
             $table->integer('cantidad');

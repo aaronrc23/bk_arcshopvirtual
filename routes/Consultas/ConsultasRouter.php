@@ -3,10 +3,13 @@
 use App\Http\Controllers\Consultas\ConsultasController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/categoryshop', [ConsultasController::class, 'listCatpadre']);
 Route::get('/list', [ConsultasController::class, 'listInventarioVirtual']);
 Route::get('/categorias', [ConsultasController::class, 'listCategorias']);
-Route::get('/producto/{categoriaId}', [ConsultasController::class, 'productosPorCategoria']);
+Route::get('/marcas', [ConsultasController::class, 'listMarcas']);
+Route::get('/producto', [ConsultasController::class, 'productosPorCategoria']);
 Route::get('/{id}', [ConsultasController::class, 'show']);
+
 
 
 

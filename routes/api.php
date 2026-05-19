@@ -27,13 +27,18 @@ Route::get('/storage-link', function () {
 });
 
 require __DIR__ . "/Auth/LoginRoute.php";
-require __DIR__ ."/Administracion/EmpleadoRoute.php";
-require __DIR__ ."/Logistica/CategoriaRouter.php";
-require __DIR__ ."/Administracion/AsignacionRolesRouter.php";
-require __DIR__ ."/Logistica/ProductoRouter.php";
-require __DIR__ ."/Consultas/ConsultasRouter.php";
-require __DIR__ ."/Warehouse/AlmacenRouter.php";
-require __DIR__ ."/Warehouse/InventarioRouter.php";
+require __DIR__ . "/Administracion/EmpleadoRoute.php";
+require __DIR__ . "/Administracion/DashboardRouter.php";
+require __DIR__ . "/Logistica/CategoriaRouter.php";
+require __DIR__ . "/Logistica/MarcasRouter.php";
+require __DIR__ . "/Warehouse/MovimientoRouter.php";
+require __DIR__ . "/Administracion/AsignacionRolesRouter.php";
+require __DIR__ . "/Logistica/ProductoRouter.php";
+require __DIR__ . "/Consultas/ConsultasRouter.php";
+require __DIR__ . "/Warehouse/AlmacenRouter.php";
+require __DIR__ . "/Warehouse/InventarioRouter.php";
+require __DIR__ . "/Warehouse/MovimientoRouter.php";
+
 
 
 // Route::get('/user', function (Request $request) {

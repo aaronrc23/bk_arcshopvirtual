@@ -15,7 +15,7 @@ class ListProdshopReosurce extends JsonResource
             'id' => $this->id,
             'stock' => $this->stock,
 
-            'producto' => [
+            'producto' => $this->producto ? [
                 'id' => $this->producto->id,
                 'name' => $this->producto->name,
                 'precio' => $this->producto->precio_venta,
@@ -23,7 +23,8 @@ class ListProdshopReosurce extends JsonResource
                 'imagen' => $this->producto->imagenPrincipal
                     ? Storage::disk('public')->url($this->producto->imagenPrincipal->url)
                     : null,
-            ],
+
+            ] : null,
         ];
     }
 }

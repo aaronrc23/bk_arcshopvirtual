@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Administracion;
+namespace App\services\Administracion;
 
 use App\Http\Requests\Administracion\EmpleadoCreateRqt;
 use App\Models\Administracion\Empleados;

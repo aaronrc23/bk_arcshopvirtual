@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Logistica\Marcas;
+namespace App\services\Logistica\Marcas;
 
 use App\Models\Logistica\Marcas;
 use Illuminate\Http\UploadedFile;

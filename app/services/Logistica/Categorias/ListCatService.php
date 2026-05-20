@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services\Logistica\Categorias;
+namespace App\services\Logistica\Categorias;
 
 use App\Enums\Categorylevel;
-use App\Http\Resources\Logistica\CatDropResource;
+use App\Http\Resources\Logistica\Categorias\CatDropresource;
 use App\Models\Logistica\Categorias;
 use Illuminate\Support\Facades\DB;
 
@@ -89,6 +89,6 @@ class ListCatService
             abort(400, 'No hay categorías eliminadas');
         }
 
-        return CatDropResource::collection($categorias);
+        return CatDropresource::collection($categorias);
     }
 }

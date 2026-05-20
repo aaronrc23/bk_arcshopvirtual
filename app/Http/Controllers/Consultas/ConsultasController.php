@@ -12,7 +12,7 @@ use App\Models\Catalogos\Unidades;
 use App\Models\Logistica\Categorias;
 use App\Models\Logistica\Marcas;
 use App\Models\Warehouse\Inventario;
-use App\Services\Consultas\FindStore;
+use App\services\Consultas\FindStore;
 use Illuminate\Http\Request;
 
 class ConsultasController extends Controller

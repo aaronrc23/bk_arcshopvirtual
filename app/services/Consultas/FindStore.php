@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Consultas;
+namespace App\services\Consultas;
 
 use App\Models\Logistica\Categorias;
 use Illuminate\Support\Facades\Storage;

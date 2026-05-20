@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Logistica;
 
 use App\Http\Controllers\Controller;
-use App\Services\Logistica\Marcas\MarcaService;
+use App\services\Logistica\Marcas\MarcaService;
 use Illuminate\Http\Request;
 
 class MarcasController extends Controller

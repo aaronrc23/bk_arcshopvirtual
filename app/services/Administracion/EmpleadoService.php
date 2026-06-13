@@ -3,20 +3,33 @@
 namespace App\services\Administracion;
 
 use App\Http\Requests\Administracion\EmpleadoCreateRqt;
+use App\Http\Requests\Administracion\UpdatePasswordEmp;
 use App\Models\Administracion\Empleados;
 use App\Models\Administracion\Empresa;
 use App\Models\Auth\Profiles;
 use App\Models\Auth\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class EmpleadoService
 {
+
     public function list()
     {
         $empleado = Empleados::with('user.profile')->get();
         return $empleado;
     }
+
+    public function UserEmpleado()
+    {
+        $user = Auth::user()->id;
+        return Empleados::with('user.profile')->where('user_id', $user)->first();
+    }
+
+
+
+
     public function registerEmpleado(EmpleadoCreateRqt $request)
     {
         return DB::transaction(function () use ($request) {
@@ -144,5 +157,23 @@ class EmpleadoService
                 $empleado->restore();
             }
         });
+    }
+
+
+    public function updatePassword(UpdatePasswordEmp $request)
+    {
+        $user = Auth::user();
+        $validated = $request->validated();
+        User::where('id', $user->id)->update(['password' => bcrypt($validated['new_password'])]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Contraseña actualizada correctamente',
+        ]);
+    }
+
+
+    public function cerrarSessionGlobal()
+    {
+        return  auth()->user()->tokens()->delete();
     }
 }

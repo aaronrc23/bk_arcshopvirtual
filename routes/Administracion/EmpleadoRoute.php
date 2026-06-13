@@ -9,14 +9,16 @@ Route::post('/panel/login', [AuthController::class, 'loginEmpleado']);
 
 Route::middleware(['auth:sanctum'])->prefix('empleado')->controller(EmpleadoController::class)->group(function () {
     Route::get('index', 'index');
+    Route::get('perfil', 'findUserEmpleado');
 });
 
 
 
 Route::middleware(['auth:sanctum', 'permission:editar roles'])->prefix('empleado')->controller(EmpleadoController::class)->group(function () {
-
     Route::post("register", "register");
     Route::put("update/{empleado}", "update");
     Route::delete("destroy/{empleadoId}", "destroy");
     Route::put("restore/{empleadoId}", "restore");
+    Route::put('update-password', 'updatePassword');
+    Route::post('logoutGlobal', 'cerrarSessionGlobal');
 });

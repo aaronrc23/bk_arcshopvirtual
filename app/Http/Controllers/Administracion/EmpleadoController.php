@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Administracion;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Administracion\EmpleadoCreateRqt;
 use App\Http\Requests\Administracion\EmpleadoUpdateRqt;
+use App\Http\Requests\Administracion\UpdatePasswordEmp;
 use App\Http\Resources\Administracion\EmpleadoResource;
 use App\Models\Administracion\Empleados;
 use App\services\Administracion\EmpleadoService;
@@ -26,6 +27,13 @@ class EmpleadoController extends Controller
     {
         $data = $this->empleadosService->list();
         return EmpleadoResource::collection($data);
+    }
+
+
+    public function findUserEmpleado()
+    {
+        $data = $this->empleadosService->UserEmpleado();
+        return new EmpleadoResource($data);
     }
 
     public function register(EmpleadoCreateRqt $request)
@@ -54,6 +62,12 @@ class EmpleadoController extends Controller
         ]);
     }
 
+    public function updatePassword(UpdatePasswordEmp $request)
+    {
+        $response = $this->empleadosService->updatePassword($request);
+        return response()->json($response);
+    }
+
 
     public function restore(int $empleadoId)
     {
@@ -62,6 +76,15 @@ class EmpleadoController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Empleado restaurado correctamente'
+        ]);
+    }
+
+    public function cerrarSessionGlobal()
+    {
+        $this->empleadosService->cerrarSessionGlobal();
+        return response()->json([
+            'success' => true,
+            'message' => 'Sesión cerrada en todos los dispositivos correctamente'
         ]);
     }
 }

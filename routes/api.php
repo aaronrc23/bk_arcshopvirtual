@@ -23,7 +23,7 @@ Route::get('/clear-cache', function () {
 });
 
 
-Route::get('/routes', function () {
+Route::get('/rutas/list', function () {
     Artisan::call('route:list');
 
     return '<pre>' . Artisan::output() . '</pre>';

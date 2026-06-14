@@ -17,15 +17,19 @@ Route::get('/clear-cache', function () {
     // Limpiar cache de aplicación
     Artisan::call('cache:clear');
 
+    Artisan::call('optimize:clear');
+
     return "Cache limpiada correctamente ✅";
 });
 
 
-Route::get('/run-migrate', function () {
-    Artisan::call('migrate', ['--force' => true]);
+Route::get('/routes', function () {
+    Artisan::call('route:list');
 
-    return nl2br(Artisan::output());
+    return '<pre>' . Artisan::output() . '</pre>';
 });
+
+
 
 
 Route::get('/storage-link', function () {

@@ -15,17 +15,18 @@ use Illuminate\Validation\ValidationException;
 class EmpleadoService
 {
 
+    public function UserEmpleado()
+    {
+        $user = Auth::user()->id;
+        return Empleados::with('user.profile')->where('user_id', $user)->first();
+    }
+
     public function list()
     {
         $empleado = Empleados::with('user.profile')->get();
         return $empleado;
     }
 
-    public function UserEmpleado()
-    {
-        $user = Auth::user()->id;
-        return Empleados::with('user.profile')->where('user_id', $user)->first();
-    }
 
 
 

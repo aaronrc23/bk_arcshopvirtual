@@ -21,6 +21,13 @@ Route::get('/clear-cache', function () {
 });
 
 
+Route::get('/run-migrate', function () {
+    Artisan::call('migrate', ['--force' => true]);
+
+    return nl2br(Artisan::output());
+});
+
+
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');
     return "Storage link creado correctamente ✅";

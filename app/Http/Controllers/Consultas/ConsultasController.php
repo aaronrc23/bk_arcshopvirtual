@@ -146,6 +146,12 @@ class ConsultasController extends Controller
             ->where('product_id', $id)
             ->first();
 
+        if (! $producto) {
+            return response()->json([
+                'message' => 'Inventario no encontrado para el producto especificado.',
+            ], 404);
+        }
+
         return new listDetailProdRes($producto);
     }
 }

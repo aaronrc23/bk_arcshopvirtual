@@ -18,16 +18,16 @@ class listDetailProdRes extends JsonResource
     {
         return [
             'id' => $this->id ?? null,
-            'stock' => $this->stock,
+            'stock' => $this->stock ?? null,
 
-            'producto' => [
+            'producto' => $this->producto ? [
                 'id' => $this->producto->id,
                 'name' => $this->producto->name,
                 'precio' => $this->producto->precio_venta,
                 'descripcion' => $this->producto->description,
                 'precio_mayoreo' => $this->producto->precio_mayoreo,
-                'categoria' => $this->producto->categoria->name,
-                'unidad' => $this->producto->unidad->descripcion,
+                'categoria' => $this->producto->categoria?->name,
+                'unidad' => $this->producto->unidad?->descripcion,
 
                 'imagen' => $this->producto->imagenPrincipal
                     ? Storage::disk('public')->url($this->producto->imagenPrincipal->url)
@@ -35,15 +35,15 @@ class listDetailProdRes extends JsonResource
 
                 // 🔥 TODAS las imágenes (galería)
                 'imagenes' => ProductImgResource::collection(
-                    $this->producto->imagenes
+                    $this->producto->imagenes ?? collect([])
                 ),
-                'caracteristicas' => $this->producto->caracteristicas->map(function ($item) {
+                'caracteristicas' => ($this->producto->caracteristicas ?? collect([]))->map(function ($item) {
                     return [
                         'descripcion' => $item->descripcion,
                     ];
                 }),
 
-                'presentaciones' => $this->producto->presentaciones->map(function ($item) {
+                'presentaciones' => ($this->producto->presentaciones ?? collect([]))->map(function ($item) {
                     return [
                         'id' => $item->id,
                         'medida' => $item->medida,
@@ -57,7 +57,7 @@ class listDetailProdRes extends JsonResource
                         'es_principal' => (bool) $item->es_principal,
                     ];
                 }),
-            ],
+            ] : null,
         ];
     }
 }

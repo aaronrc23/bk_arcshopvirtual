@@ -16,6 +16,10 @@ class listDetailProdRes extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        if (is_null($this->resource)) {
+            return [];
+        }
+
         return [
             'id' => $this->id ?? null,
             'stock' => $this->stock ?? null,

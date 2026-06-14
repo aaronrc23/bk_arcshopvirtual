@@ -8,7 +8,7 @@ Route::get('/list', [ConsultasController::class, 'listInventarioVirtual']);
 Route::get('/categorias', [ConsultasController::class, 'listCategorias']);
 Route::get('/marcas', [ConsultasController::class, 'listMarcas']);
 Route::get('/producto', [ConsultasController::class, 'productosPorCategoria']);
-Route::get('/producto/{id}', [ConsultasController::class, 'show']);
+Route::get('/{id}', [ConsultasController::class, 'show']);
 
 
 

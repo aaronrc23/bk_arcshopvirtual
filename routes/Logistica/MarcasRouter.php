@@ -10,4 +10,4 @@ Route::middleware(['auth:sanctum', 'authempleado'])->prefix('marcas')->controlle
     Route::put('/desactivar/{id}', 'desactivar');
     Route::put('/reactivar/{id}', 'reactivar');
     Route::delete('/destroy/{id}', 'destroy')->middleware('permission:eliminar productos');
-});
+}); 

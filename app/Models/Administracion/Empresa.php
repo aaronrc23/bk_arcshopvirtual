@@ -16,6 +16,7 @@ class Empresa extends Model
         'ruc',
         'razon_social',
         'nombre_comercial',
+        'descripcion',
         'logo_path',
         'direccion',
         'pais',
@@ -24,6 +25,13 @@ class Empresa extends Model
         'distrito',
         'ubigeo',
         'email',
+        'telefono',
+        'facebook_url',
+        'instagram_url',
+        'twitter_url',
+        'whatsapp',
+        'footer_links',
+        'copyright_text',
         'certificado',
         'usuario_sol',
         'clave_sol',
@@ -38,6 +46,13 @@ class Empresa extends Model
         'refresh_token_api',
         'estado',
     ];
+
+    protected $casts = [
+        'footer_links' => 'array',
+        'estado' => 'boolean',
+        'estado_api' => 'boolean',
+    ];
+
     public $timestamps = false;
 
     public function empleados()

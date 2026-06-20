@@ -78,6 +78,7 @@ class ConsultasController extends Controller
             'almacen'
         ])
             ->whereHas('almacen', fn($q) => $q->where('tipo', 'VIRTUAL'))
+            ->whereHas('producto', fn($q) => $q->where('destacado', true))
             ->get();
 
         return ListProdshopReosurce::collection($inventario);

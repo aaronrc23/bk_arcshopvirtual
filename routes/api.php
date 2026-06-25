@@ -31,10 +31,7 @@ Route::get('/rutas/list', function () {
 
 
 Route::get('/migrate', function () {
-    // Ejemplo rápido de protección
-    if (request()->query('key') !== env('APP_KEY')) {
-        abort(403);
-    }
+  
 
     Artisan::call('migrate', ['--force' => true]);
     return "Migraciones ejecutadas";

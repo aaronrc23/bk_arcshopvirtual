@@ -30,6 +30,7 @@ class listDetailProdRes extends JsonResource
                 'precio' => $this->producto->precio_venta,
                 'descripcion' => $this->producto->description,
                 'precio_mayoreo' => $this->producto->precio_mayoreo,
+                'cantidad_mayoreo' => $this->producto->cantidad_mayoreo,
                 'categoria' => $this->producto->categoria?->name,
                 'unidad' => $this->producto->unidad?->descripcion,
 

@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Consultas;
 
 use App\Enums\Categorylevel;
+use App\Models\Logistica\Categorias;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Shop\listDetailProdRes;
 use App\Http\Resources\Shop\ListProdshopReosurce;
 use App\Models\Catalogos\TipoAfectacion;
 use App\Models\Catalogos\TipoComprobante;
 use App\Models\Catalogos\Unidades;
-use App\Models\Logistica\Categorias;
 use App\Models\Logistica\Marcas;
 use App\Models\Warehouse\Inventario;
 use App\services\Consultas\FindStore;
@@ -30,11 +30,20 @@ class ConsultasController extends Controller
     }
     public function listCategorias()
     {
-        $categorias = Categorias::where("level", Categorylevel::SUBCATEGORIA)
+        // Retorna todas las categorías activas con jerarquía
+        $categorias = Categorias::whereNull('deleted_at')
+            ->where('is_active', true)
             ->get()
             ->map(fn($c) => [
-                "id" => $c->id,
-                "nombre" => $c->name,
+                "id"        => $c->id,
+                "slug"      => $c->slug,
+                "nombre"    => $c->name,
+                "level"     => $c->level?->value,
+                "parent_id" => $c->parent_id,
+                "childrenCount" => $c->children()
+                    ->whereNull('deleted_at')
+                    ->where('is_active', true)
+                    ->count(),
             ]);
 
         return response()->json($categorias);
@@ -71,17 +80,27 @@ class ConsultasController extends Controller
     }
 
 
-    public function listInventarioVirtual()
+    public function listInventarioVirtual(Request $request)
     {
+        $perPage = $request->integer('per_page', 12);
+
         $inventario = Inventario::with([
             'producto.imagenPrincipal',
             'almacen'
         ])
             ->whereHas('almacen', fn($q) => $q->where('tipo', 'VIRTUAL'))
             ->whereHas('producto', fn($q) => $q->where('destacado', true))
-            ->get();
+            ->paginate($perPage);
 
-        return ListProdshopReosurce::collection($inventario);
+        return response()->json([
+            'data' => ListProdshopReosurce::collection($inventario),
+            'meta' => [
+                'current_page' => $inventario->currentPage(),
+                'last_page'    => $inventario->lastPage(),
+                'per_page'     => $inventario->perPage(),
+                'total'        => $inventario->total(),
+            ],
+        ]);
     }
 
 
@@ -89,6 +108,7 @@ class ConsultasController extends Controller
     {
         $categoriaId = $request->query('categoria_id');
         $marcaId = $request->query('marca_id');
+        $perPage = $request->integer('per_page', 12);
 
         $query = Inventario::with([
             'producto.imagenPrincipal',
@@ -101,8 +121,22 @@ class ConsultasController extends Controller
         if ($categoriaId) {
             $query->whereHas(
                 'producto',
-                fn($q) =>
-                $q->where('categoria_id', $categoriaId)
+                function ($q) use ($categoriaId) {
+                    // Buscar la categoría para ver si es padre
+                    $cat = Categorias::find($categoriaId);
+                    if ($cat && $cat->level === Categorylevel::CATEGORIA) {
+                        // Si es categoría padre, incluir también sus subcategorías
+                        $subIds = $cat->children()
+                            ->whereNull('deleted_at')
+                            ->where('is_active', true)
+                            ->pluck('id')
+                            ->toArray();
+                        $allIds = array_merge([$categoriaId], $subIds);
+                        $q->whereIn('categoria_id', $allIds);
+                    } else {
+                        $q->where('categoria_id', $categoriaId);
+                    }
+                }
             );
         }
 
@@ -114,7 +148,17 @@ class ConsultasController extends Controller
             );
         }
 
-        return ListProdshopReosurce::collection($query->get());
+        $inventario = $query->paginate($perPage);
+
+        return response()->json([
+            'data' => ListProdshopReosurce::collection($inventario),
+            'meta' => [
+                'current_page' => $inventario->currentPage(),
+                'last_page'    => $inventario->lastPage(),
+                'per_page'     => $inventario->perPage(),
+                'total'        => $inventario->total(),
+            ],
+        ]);
     }
 
     // public function productosPorCategoria($categoriaId)
@@ -134,7 +178,7 @@ class ConsultasController extends Controller
     //     return ListProdshopReosurce::collection($inventario);
     // }
 
-    public function show($id)
+    public function show($slug)
     {
         $producto = Inventario::with([
             'producto.imagenes',
@@ -144,12 +188,13 @@ class ConsultasController extends Controller
             'producto.presentaciones',
 
         ])
-            ->where('product_id', $id)
+            ->whereHas('producto', fn($q) => $q->where('slug', $slug))
+            ->orWhereHas('producto', fn($q) => $q->where('id', $slug))
             ->first();
 
         if (! $producto) {
             return response()->json([
-                'message' => 'Inventario no encontrado para el producto especificado.',
+                'message' => 'Producto no encontrado.',
             ], 404);
         }
 

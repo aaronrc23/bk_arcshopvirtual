@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Productos extends Model
 {
@@ -17,6 +18,7 @@ class Productos extends Model
 
     protected $fillable = [
         'name',
+        'slug',
         'description',
         'valor_unitario',
         'precio_venta',
@@ -35,6 +37,21 @@ class Productos extends Model
         'destacado',
         'cantidad_mayoreo',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($producto) {
+            if (empty($producto->slug)) {
+                $producto->slug = \Illuminate\Support\Str::slug($producto->name);
+            }
+        });
+
+        static::updating(function ($producto) {
+            if ($producto->isDirty('name') && !$producto->isDirty('slug')) {
+                $producto->slug = \Illuminate\Support\Str::slug($producto->name);
+            }
+        });
+    }
 
     protected $casts = [
         'valor_unitario' => 'decimal:3',
